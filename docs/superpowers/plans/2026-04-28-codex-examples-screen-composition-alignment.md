@@ -53,7 +53,7 @@ This plan improves implemented core screens. It does not add new stages, new com
 - Modify: `tests/menuOverlay.test.ts`
 - Modify: `src/ui/menuOverlay.ts`
 
-- [ ] **Step 1: Write the failing menu composition tests**
+- [x] **Step 1: Write the failing menu composition tests**
 
 Add this test block to `tests/menuOverlay.test.ts` inside the existing `describe('menuOverlay', ...)`:
 
@@ -76,7 +76,7 @@ it('uses the codex_examples shell roles on all menu screens', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused test to verify it fails**
+- [x] **Step 2: Run the focused test to verify it fails**
 
 Run:
 
@@ -86,7 +86,7 @@ npm test -- tests/menuOverlay.test.ts
 
 Expected: FAIL if the broken Korean copy or `jds-effect-stack` preview markup is still missing.
 
-- [ ] **Step 3: Update Start and Stage copy**
+- [x] **Step 3: Update Start and Stage copy**
 
 In `src/ui/menuOverlay.ts`, replace the broken Start paragraph inside `renderStart()` with:
 
@@ -100,7 +100,7 @@ In `renderStageSelect()`, replace the broken Stage 1 briefing paragraph with:
 <p>Python 기본 문법 오류와 첫 이벤트를 처리하는 디버거 생존 루트입니다.</p>
 ```
 
-- [ ] **Step 4: Add a stronger weapon effect preview structure**
+- [x] **Step 4: Add a stronger weapon effect preview structure**
 
 In `renderWeaponSelect()`, replace the current preview article:
 
@@ -121,7 +121,7 @@ with:
 </article>
 ```
 
-- [ ] **Step 5: Run the focused test to verify it passes**
+- [x] **Step 5: Run the focused test to verify it passes**
 
 Run:
 
@@ -131,7 +131,7 @@ npm test -- tests/menuOverlay.test.ts
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit Task 1**
+- [x] **Step 6: Commit Task 1**
 
 Run:
 
@@ -139,6 +139,12 @@ Run:
 git add src/ui/menuOverlay.ts tests/menuOverlay.test.ts
 git commit -m "feat: strengthen menu composition copy"
 ```
+
+Deferred on 2026-04-28: no separate Task 1 commit was created because these owned files already contained pre-existing Codex overlay hunks. Task 1 was reviewed with:
+
+- Spec review: approved after confirming the extra `codex.open` hunks were pre-existing dirty work.
+- Code quality review: approved.
+- `npm test -- tests/menuOverlay.test.ts`
 
 ---
 
@@ -149,7 +155,7 @@ git commit -m "feat: strengthen menu composition copy"
 - Modify: `src/ui/menuOverlay.css`
 - Modify: `tests/e2e/boot.spec.ts`
 
-- [ ] **Step 1: Add visual smoke assertions to the menu e2e flow**
+- [x] **Step 1: Add visual smoke assertions to the menu e2e flow**
 
 In `tests/e2e/boot.spec.ts`, inside `test('DOM menu flow reaches gameplay', ...)`, after the start screen visibility assertion, add:
 
@@ -167,7 +173,7 @@ After the weapon screen visibility assertion, add:
 await expect(page.locator('.jds-effect-stack')).toBeVisible();
 ```
 
-- [ ] **Step 2: Run e2e to establish the current visual baseline**
+- [x] **Step 2: Run e2e to establish the current visual baseline**
 
 Run:
 
@@ -177,7 +183,7 @@ npm run e2e
 
 Expected: FAIL if `.jds-effect-stack` is not styled/rendered yet, otherwise PASS with screenshots that still need inspection.
 
-- [ ] **Step 3: Add stable preview and action-row CSS**
+- [x] **Step 3: Add stable preview and action-row CSS**
 
 Append these rules to `src/ui/menuOverlay.css`:
 
@@ -223,7 +229,7 @@ Append these rules to `src/ui/menuOverlay.css`:
 }
 ```
 
-- [ ] **Step 4: Run build and e2e**
+- [x] **Step 4: Run build and e2e**
 
 Run:
 
@@ -234,7 +240,7 @@ npm run e2e
 
 Expected: both PASS. Inspect `test-results/phase1-dom-start-1440x900.png`, `test-results/phase1-dom-stage-1440x900.png`, and `test-results/phase1-dom-weapon-1440x900.png` for readable copy, no overlap, and visible IDE shell structure.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 Run:
 
@@ -242,6 +248,17 @@ Run:
 git add src/ui/menuOverlay.css tests/e2e/boot.spec.ts test-results/phase1-dom-start-1440x900.png test-results/phase1-dom-stage-1440x900.png test-results/phase1-dom-weapon-1440x900.png
 git commit -m "feat: polish menu shell composition"
 ```
+
+Deferred on 2026-04-28: this turn is only creating a temporary checkpoint commit for the separable files because `tests/e2e/boot.spec.ts` still contains pre-existing Codex e2e hunks and `src/ui/menuOverlay.ts` / `tests/menuOverlay.test.ts` still carry pre-existing Codex overlay hunks. Task 2 itself was verified with:
+
+- `npm run e2e` before CSS changes: failed as expected on `.jds-effect-stack` hidden
+- `npm run build`: passed
+- `npm run e2e` after CSS changes: passed
+
+Screenshot evidence from Task 2:
+
+- `test-results/phase1-dom-start-1440x900.png`
+- `test-results/phase1-dom-weapon-1440x900.png`
 
 ---
 

@@ -365,3 +365,43 @@
     overflow: auto;
   }
 }
+
+.jds-actions {
+  grid-template-columns: minmax(0, 1fr) 190px 190px;
+}
+
+.jds-actions button {
+  min-height: 46px;
+  display: grid;
+  align-items: center;
+}
+
+.jds-effect-stack {
+  position: relative;
+  width: min(220px, 100%);
+  height: 120px;
+  border: 1px solid rgba(78, 201, 176, 0.28);
+  background:
+    linear-gradient(90deg, rgba(78, 201, 176, 0.1), transparent 58%),
+    rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.jds-effect-stack i {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  height: 2px;
+  background: var(--jds-teal);
+  box-shadow: 0 0 14px rgba(78, 201, 176, 0.5);
+}
+
+.jds-effect-stack i:nth-child(1) { top: 34px; }
+.jds-effect-stack i:nth-child(2) { top: 58px; background: var(--jds-yellow); }
+.jds-effect-stack i:nth-child(3) { top: 82px; background: var(--jds-blue); }
+
+@media (max-width: 920px) {
+  .jds-actions {
+    grid-template-columns: 1fr;
+  }
+}
