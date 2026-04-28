@@ -24,6 +24,7 @@
 - Create: `src/ui/runDecisionOverlay.ts`
 - Create: `src/ui/runDecisionOverlay.css`
 - Create: `tests/runDecision.test.ts`
+- Create: `tests/runDecisionOverlay.test.ts`
 - Modify: `src/main.ts`
 - Modify: `src/scenes/GameScene.ts`
 - Modify: `tests/e2e/boot.spec.ts`
@@ -41,7 +42,7 @@
 - Create: `src/ui/runDecision.ts`
 - Create: `tests/runDecision.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `tests/runDecision.test.ts`:
 
@@ -86,13 +87,13 @@ describe('runDecision', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- tests/runDecision.test.ts`
 
 Expected: FAIL because `src/ui/runDecision.ts` does not exist.
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/ui/runDecision.ts`:
 
@@ -143,13 +144,13 @@ function formatElapsed(elapsedSec: number): string {
 }
 ```
 
-- [ ] **Step 4: Run the focused test**
+- [x] **Step 4: Run the focused test**
 
 Run: `npm test -- tests/runDecision.test.ts`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -166,7 +167,7 @@ git commit -m "test: add run decision view models"
 - Create: `src/ui/runDecisionOverlay.css`
 - Modify: `src/main.ts`
 
-- [ ] **Step 1: Create overlay module**
+- [x] **Step 1: Create overlay module**
 
 Create `src/ui/runDecisionOverlay.ts`:
 
@@ -245,7 +246,7 @@ function showOverlay(html: string): void {
 }
 ```
 
-- [ ] **Step 2: Create overlay CSS**
+- [x] **Step 2: Create overlay CSS**
 
 Create `src/ui/runDecisionOverlay.css`:
 
@@ -296,7 +297,7 @@ Create `src/ui/runDecisionOverlay.css`:
 .jds-decision .actions button { min-width: 140px; color: #4ec9b0; }
 ```
 
-- [ ] **Step 3: Import CSS**
+- [x] **Step 3: Import CSS**
 
 In `src/main.ts`, add:
 
@@ -304,13 +305,13 @@ In `src/main.ts`, add:
 import './ui/runDecisionOverlay.css';
 ```
 
-- [ ] **Step 4: Run build**
+- [x] **Step 4: Run build**
 
 Run: `npm run build`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -325,7 +326,7 @@ git commit -m "feat: add DOM run decision overlays"
 
 - Modify: `src/scenes/GameScene.ts`
 
-- [ ] **Step 1: Import overlay helpers**
+- [x] **Step 1: Import overlay helpers**
 
 Add:
 
@@ -334,7 +335,7 @@ import { clearRunDecisionOverlay, showGameOverOverlay, showQuickFixOverlay, show
 import type { QuickFixId } from '../ui/runDecision';
 ```
 
-- [ ] **Step 2: Add decision state**
+- [x] **Step 2: Add decision state**
 
 Add fields:
 
@@ -343,7 +344,7 @@ private isChoosingUpgrade = false;
 private nextUpgradeAtKills = 12;
 ```
 
-- [ ] **Step 3: Pause update while choosing**
+- [x] **Step 3: Pause update while choosing**
 
 At the top of `update()` after the ended check, add:
 
@@ -351,7 +352,7 @@ At the top of `update()` after the ended check, add:
 if (this.isChoosingUpgrade) return;
 ```
 
-- [ ] **Step 4: Open Quick Fix on kill threshold**
+- [x] **Step 4: Open Quick Fix on kill threshold**
 
 After `this.kills += 1;`, add:
 
@@ -380,7 +381,7 @@ private applyQuickFix(id: QuickFixId): void {
 }
 ```
 
-- [ ] **Step 5: Replace end-run Phaser panel**
+- [x] **Step 5: Replace end-run Phaser panel**
 
 In `endRun(clear: boolean)`, show DOM result overlays:
 
@@ -405,7 +406,7 @@ if (clear) {
 }
 ```
 
-- [ ] **Step 6: Clear overlay on shutdown**
+- [x] **Step 6: Clear overlay on shutdown**
 
 In `create()`, add:
 
@@ -413,7 +414,7 @@ In `create()`, add:
 this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => clearRunDecisionOverlay());
 ```
 
-- [ ] **Step 7: Run verification**
+- [x] **Step 7: Run verification**
 
 Run:
 
@@ -424,7 +425,7 @@ npm run build
 
 Expected: both PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 
@@ -439,7 +440,7 @@ git commit -m "feat: connect DOM decision overlays"
 
 - Modify: `tests/e2e/boot.spec.ts`
 
-- [ ] **Step 1: Add smoke screenshot flow**
+- [x] **Step 1: Add smoke screenshot flow**
 
 Add:
 
@@ -456,13 +457,13 @@ test('decision overlays do not break canvas flow', async ({ page }) => {
 });
 ```
 
-- [ ] **Step 2: Run e2e**
+- [x] **Step 2: Run e2e**
 
 Run: `npm run e2e`
 
 Expected: PASS and `test-results/decision-result-1440x900.png` exists.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 Run:
 
@@ -477,7 +478,7 @@ git commit -m "test: cover decision overlay smoke flow"
 
 - Modify: `PLANS.md`
 
-- [ ] **Step 1: Run full verification**
+- [x] **Step 1: Run full verification**
 
 Run:
 
@@ -489,7 +490,22 @@ npm run e2e
 
 Expected: all commands PASS.
 
-- [ ] **Step 2: Update docs**
+Phase 3 DOM decision/result screens verified on 2026-04-28 with:
+
+```text
+npm test
+npm run build
+npm run e2e
+```
+
+Screenshot evidence:
+
+- `test-results/decision-result-1440x900.png`
+- `test-results/quick-fix-1440x900.png`
+
+Implementation note: the retry action keeps the current weapon because the current `GameScene` does not yet track a `stageId` field. The cooldown Quick Fix applies the existing `WeaponSystem.levelUp()` behavior; damage remains modeled in the option copy only until a weapon stat modifier system exists.
+
+- [x] **Step 2: Update docs**
 
 In this phase plan, mark Phase 3 complete only after full verification passes.
 
@@ -497,7 +513,7 @@ In `PLANS.md`, mark Phase 3 `[x]` and Phase 4 `[~]` only after the final verific
 
 If all UI Renewal phases are complete, move the completed work summary to `docs/superpowers/plans/ARCHIVE.md` instead of leaving the finished work active in `PLANS.md`.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 Run:
 

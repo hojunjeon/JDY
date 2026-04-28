@@ -3,6 +3,8 @@ import { enemies, stages, weapons } from '../data/gameData';
 import { EventSystem } from '../systems/EventSystem';
 import { WeaponSystem } from '../systems/WeaponSystem';
 import type { EnemyConfig, EnemyId, EventId, WeaponConfig, WeaponId } from '../types';
+import type { QuickFixId } from '../ui/runDecision';
+import { clearRunDecisionOverlay, showGameOverOverlay, showQuickFixOverlay, showStageClearOverlay } from '../ui/runDecisionOverlay';
 import { buildRuntimeHudView, type RuntimeEventSummary } from '../ui/runtimeOverlay';
 import { clearRuntimeAlert, showBossWarning, showQuestToast } from '../ui/runtimeOverlayDom';
 import { toHexColor, uiColors, uiDepths, uiFonts, uiLayout } from '../ui/theme';
@@ -48,6 +50,8 @@ export class GameScene extends Phaser.Scene {
   private eventLog!: Phaser.GameObjects.Text;
   private selectedWeapon: WeaponId = 'python';
   private isEnded = false;
+  private isChoosingUpgrade = false;
+  private nextUpgradeAtKills = 12;
 
   constructor() {
     super('GameScene');
@@ -84,11 +88,15 @@ export class GameScene extends Phaser.Scene {
     }).setScrollFactor(0).setDepth(100);
     this.input.keyboard?.on('keydown-R', () => this.scene.restart({ weapon: this.selectedWeapon }));
     this.input.keyboard?.on('keydown-ESC', () => this.scene.start('MenuScene'));
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => clearRuntimeAlert());
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      clearRuntimeAlert();
+      clearRunDecisionOverlay();
+    });
   }
 
   update(_time: number, deltaMs: number): void {
     if (this.isEnded) return;
+    if (this.isChoosingUpgrade) return;
     const dt = deltaMs / 1000;
     this.elapsedSec += dt;
     this.updatePlayer(dt);
@@ -213,6 +221,9 @@ export class GameScene extends Phaser.Scene {
       const alive = enemy.hp > 0;
       if (!alive) {
         this.kills += 1;
+        if (!this.isChoosingUpgrade && this.kills >= this.nextUpgradeAtKills) {
+          this.openQuickFix();
+        }
         const completed = this.eventSystem.notifyKill(enemy.id);
         completed.forEach((event) => {
           showQuestToast({ title: `${event.id.toUpperCase()} complete`, dialogue: event.dialogue, rewardText: event.rewardText });
@@ -273,24 +284,43 @@ export class GameScene extends Phaser.Scene {
     this.hudBoss.setText(view.bossLine ?? 'move WASD/arrows | R restart | ESC menu');
   }
 
+  private openQuickFix(): void {
+    this.isChoosingUpgrade = true;
+    showQuickFixOverlay({
+      weapon: this.selectedWeapon,
+      onSelect: (id) => this.applyQuickFix(id),
+    });
+  }
+
+  private applyQuickFix(id: QuickFixId): void {
+    if (id === 'cooldown') this.weaponSystem.levelUp(this.selectedWeapon);
+    if (id === 'heal') this.hp = Math.min(100, this.hp + 25);
+    this.nextUpgradeAtKills += 18;
+    this.isChoosingUpgrade = false;
+    clearRunDecisionOverlay();
+  }
+
   private endRun(clear: boolean): void {
     this.isEnded = true;
-    const text = clear
-      ? 'git push origin stage-2  // Stage 1 clear'
-      : 'throw new GameOverError("session crashed")';
-    this.add.rectangle(this.cameras.main.scrollX + 480, this.cameras.main.scrollY + 320, 620, 180, 0x0b1020, 0.96)
-      .setStrokeStyle(1, clear ? 0x65d6ad : 0xff5c7a)
-      .setDepth(200);
-    this.add.text(this.cameras.main.scrollX + 210, this.cameras.main.scrollY + 272, text, {
-      fontFamily: 'monospace',
-      fontSize: '22px',
-      color: clear ? '#65d6ad' : '#ff5c7a',
-    }).setDepth(201);
-    this.add.text(this.cameras.main.scrollX + 290, this.cameras.main.scrollY + 330, '[ R ] restart   [ ESC ] menu', {
-      fontFamily: 'monospace',
-      fontSize: '18px',
-      color: '#d7dee8',
-    }).setDepth(201);
+    if (clear) {
+      showStageClearOverlay({
+        stageTitle: stages[0].title,
+        elapsedSec: this.elapsedSec,
+        kills: this.kills,
+        unlockedText: 'reward weapon unlocked',
+        onContinue: () => this.scene.start('MenuScene'),
+        onMenu: () => this.scene.start('MenuScene'),
+      });
+      return;
+    }
+
+    showGameOverOverlay({
+      stageTitle: stages[0].title,
+      elapsedSec: this.elapsedSec,
+      kills: this.kills,
+      onRetry: () => this.scene.restart({ weapon: this.selectedWeapon }),
+      onMenu: () => this.scene.start('MenuScene'),
+    });
   }
 
   private drawWorldGrid(): void {
