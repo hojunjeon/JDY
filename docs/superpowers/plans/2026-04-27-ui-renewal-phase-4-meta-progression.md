@@ -41,7 +41,7 @@
 - Create: `src/ui/codexModel.ts`
 - Create: `tests/codexModel.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `tests/codexModel.test.ts`:
 
@@ -80,13 +80,13 @@ describe('codexModel', () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- tests/codexModel.test.ts`
 
 Expected: FAIL because `src/ui/codexModel.ts` does not exist.
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/ui/codexModel.ts`:
 
@@ -155,13 +155,13 @@ export function buildCodexEntries(): CodexEntry[] {
 }
 ```
 
-- [ ] **Step 4: Run the focused test**
+- [x] **Step 4: Run the focused test**
 
 Run: `npm test -- tests/codexModel.test.ts`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** — Skipped by explicit user instruction: do not commit or push.
 
 Run:
 
@@ -178,7 +178,7 @@ git commit -m "test: add codex model"
 - Create: `src/ui/codexOverlay.css`
 - Modify: `src/main.ts`
 
-- [ ] **Step 1: Create overlay module**
+- [x] **Step 1: Create overlay module**
 
 Create `src/ui/codexOverlay.ts`:
 
@@ -244,7 +244,7 @@ export function clearCodexOverlay(): void {
 }
 ```
 
-- [ ] **Step 2: Create overlay CSS**
+- [x] **Step 2: Create overlay CSS**
 
 Create `src/ui/codexOverlay.css`:
 
@@ -291,7 +291,7 @@ Create `src/ui/codexOverlay.css`:
 .jds-codex .entry p { margin: 0; color: #858585; line-height: 1.5; }
 ```
 
-- [ ] **Step 3: Import CSS**
+- [x] **Step 3: Import CSS**
 
 In `src/main.ts`, add:
 
@@ -299,7 +299,7 @@ In `src/main.ts`, add:
 import './ui/codexOverlay.css';
 ```
 
-- [ ] **Step 4: Run verification**
+- [x] **Step 4: Run verification**
 
 Run:
 
@@ -310,7 +310,7 @@ npm run build
 
 Expected: both PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit** — Skipped by explicit user instruction: do not commit or push.
 
 Run:
 
@@ -327,7 +327,7 @@ git commit -m "feat: add DOM codex overlay"
 - Modify: `src/scenes/MenuScene.ts`
 - Modify: `src/scenes/GameScene.ts`
 
-- [ ] **Step 1: Add Codex button to start overlay**
+- [x] **Step 1: Add Codex button to start overlay**
 
 In the start-screen HTML returned from `renderStart()`, add:
 
@@ -335,7 +335,7 @@ In the start-screen HTML returned from `renderStart()`, add:
 <button data-action="codex.open">open codex</button>
 ```
 
-- [ ] **Step 2: Dispatch Codex from menu overlay**
+- [x] **Step 2: Dispatch Codex from menu overlay**
 
 Extend the `mountMenuOverlay` click handler to call a new optional callback:
 
@@ -350,7 +350,7 @@ export function mountMenuOverlay(input: {
 }
 ```
 
-- [ ] **Step 3: Connect `MenuScene` to Codex overlay**
+- [x] **Step 3: Connect `MenuScene` to Codex overlay**
 
 In `MenuScene`, import:
 
@@ -366,7 +366,7 @@ openCodex: () => showCodexOverlay({ onClose: () => this.render() }),
 
 Add `clearCodexOverlay();` inside `destroyOverlay()`.
 
-- [ ] **Step 4: Add stage-clear result Codex action**
+- [x] **Step 4: Add stage-clear result Codex action**
 
 In `src/ui/runDecisionOverlay.ts`, extend the stage-clear input:
 
@@ -409,13 +409,13 @@ onCodex: () => showCodexOverlay({
 }),
 ```
 
-- [ ] **Step 5: Run build**
+- [x] **Step 5: Run build**
 
 Run: `npm run build`
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit** — Skipped by explicit user instruction: do not commit or push.
 
 Run:
 
@@ -430,7 +430,7 @@ git commit -m "feat: open codex from UI overlays"
 
 - Modify: `tests/e2e/boot.spec.ts`
 
-- [ ] **Step 1: Add Codex navigation test**
+- [x] **Step 1: Add Codex navigation test**
 
 Append:
 
@@ -446,13 +446,13 @@ test('opens DOM codex from the start screen', async ({ page }) => {
 });
 ```
 
-- [ ] **Step 2: Run e2e**
+- [x] **Step 2: Run e2e**
 
 Run: `npm run e2e`
 
 Expected: PASS and `test-results/codex-1440x900.png` exists.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit** — Skipped by explicit user instruction: do not commit or push.
 
 Run:
 
@@ -467,7 +467,7 @@ git commit -m "test: cover DOM codex navigation"
 
 - Modify: `PLANS.md`
 
-- [ ] **Step 1: Run full verification**
+- [x] **Step 1: Run full verification**
 
 Run:
 
@@ -479,11 +479,11 @@ npm run e2e
 
 Expected: all commands PASS.
 
-- [ ] **Step 2: Update roadmap**
+- [x] **Step 2: Update roadmap**
 
 In this phase plan, mark Phase 4 complete and record `test-results/codex-1440x900.png`.
 
-- [ ] **Step 3: Update root index**
+- [x] **Step 3: Update root index**
 
 Only after Phase 1 DOM alignment, Phase 2, Phase 3, and Phase 4 are all complete and verified, move the UI Renewal completed work summary to `docs/superpowers/plans/ARCHIVE.md`.
 
@@ -495,7 +495,7 @@ If no active work remains, replace `PLANS.md` with:
 No active work. See docs/superpowers/plans/ARCHIVE.md.
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit** — Skipped by explicit user instruction: do not commit or push.
 
 Run:
 
@@ -503,6 +503,14 @@ Run:
 git add PLANS.md docs/superpowers/plans/2026-04-27-ui-renewal-phase-4-meta-progression.md docs/superpowers/plans/ARCHIVE.md
 git commit -m "docs: mark UI renewal verified"
 ```
+
+
+## Verification Record
+
+- Phase 4 complete: DOM Codex model, overlay, start-menu navigation, stage-clear Codex action, and E2E coverage are implemented.
+- Screenshot evidence: `test-results/codex-1440x900.png`.
+- Final verification on 2026-04-30: `npm test` (12 files, 35 tests), `npm run build`, and `npm run e2e` (4 Playwright tests) all passed.
+- Commit steps were intentionally skipped because the user explicitly requested no commits or pushes.
 
 ## Self-Review
 

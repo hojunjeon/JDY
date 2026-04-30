@@ -1,0 +1,25 @@
+# Ralph Context Snapshot: Codex Examples Screen Composition Alignment
+
+- Created UTC: 20260430T015220Z
+- Task statement: Execute `PLANS.md` active work, which points to `docs/superpowers/plans/2026-04-28-codex-examples-screen-composition-alignment.md`, from the first unchecked checkbox.
+- Desired outcome: Finish Task 3 through Task 6, update checkboxes, keep no commits/pushes, and verify with `npm test`, `npm run build`, and `npm run e2e`.
+- Known facts/evidence:
+  - `PLANS.md` active checkpoint is Task 3, Step 1.
+  - Plan Task 1 and Task 2 are checked complete.
+  - Current work is UI composition alignment to `codex_examples` IDE/debugger shells.
+  - `docs/shared/agent-tiers.md` is absent; use available native roles and direct execution as fallback.
+- Constraints:
+  - Follow AGENTS.md and `jds-development-workflow`.
+  - UI work must honor `DESIGN.md`.
+  - Use TDD: failing focused test first, then implementation, then verification.
+  - Do not commit or push unless explicitly requested.
+  - Keep changes scoped to the plan.
+- Unknowns/open questions:
+  - Some target files already have pre-existing dirty changes; avoid reverting unrelated work.
+  - Some plan steps may already be partially implemented; verify before editing.
+- Likely codebase touchpoints:
+  - `tests/runDecisionOverlay.test.ts`, `src/ui/runDecisionOverlay.ts`, `src/ui/runDecisionOverlay.css`
+  - `tests/runtimeOverlay.test.ts`, `src/ui/runtimeOverlay.ts`, `src/ui/runtimeOverlay.css`
+  - `tests/codexOverlay.test.ts`, `src/ui/codexOverlay.ts`, `src/ui/codexOverlay.css`
+  - `tests/e2e/boot.spec.ts`
+  - `docs/superpowers/plans/2026-04-28-codex-examples-screen-composition-alignment.md`, `PLANS.md`

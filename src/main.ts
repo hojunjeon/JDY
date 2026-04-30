@@ -1,8 +1,9 @@
-import Phaser from 'phaser';
+﻿import Phaser from 'phaser';
 import './style.css';
 import './ui/menuOverlay.css';
 import './ui/runtimeOverlay.css';
 import './ui/runDecisionOverlay.css';
+import './ui/codexOverlay.css';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
 import { MenuScene } from './scenes/MenuScene';

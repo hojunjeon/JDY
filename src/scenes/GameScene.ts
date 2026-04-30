@@ -3,6 +3,7 @@ import { enemies, stages, weapons } from '../data/gameData';
 import { EventSystem } from '../systems/EventSystem';
 import { WeaponSystem } from '../systems/WeaponSystem';
 import type { EnemyConfig, EnemyId, EventId, WeaponConfig, WeaponId } from '../types';
+import { clearCodexOverlay, showCodexOverlay } from '../ui/codexOverlay';
 import type { QuickFixId } from '../ui/runDecision';
 import { clearRunDecisionOverlay, showGameOverOverlay, showQuickFixOverlay, showStageClearOverlay } from '../ui/runDecisionOverlay';
 import { buildRuntimeHudView, type RuntimeEventSummary } from '../ui/runtimeOverlay';
@@ -29,6 +30,27 @@ interface BossActor {
   sprite: Phaser.GameObjects.Arc;
 }
 
+interface RuntimeHudObjects {
+  hpValue: Phaser.GameObjects.Text;
+  hpMeter: RuntimeHudMeter;
+  upgradeValue: Phaser.GameObjects.Text;
+  upgradeMeter: RuntimeHudMeter;
+  timer: Phaser.GameObjects.Text;
+  stage: Phaser.GameObjects.Text;
+  weaponName: Phaser.GameObjects.Text;
+  weaponDetail: Phaser.GameObjects.Text;
+  eventLine: Phaser.GameObjects.Text;
+  bossLine: Phaser.GameObjects.Text;
+  bossMeter: RuntimeHudMeter;
+  hint: Phaser.GameObjects.Text;
+}
+
+interface RuntimeHudMeter {
+  background: Phaser.GameObjects.Rectangle;
+  fill: Phaser.GameObjects.Rectangle;
+  maxWidth: number;
+}
+
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Arc;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -42,11 +64,7 @@ export class GameScene extends Phaser.Scene {
   private spawnTimer = 0;
   private kills = 0;
   private hp = 100;
-  private hudPanel!: Phaser.GameObjects.Container;
-  private hudStatus!: Phaser.GameObjects.Text;
-  private hudVitals!: Phaser.GameObjects.Text;
-  private hudEvents!: Phaser.GameObjects.Text;
-  private hudBoss!: Phaser.GameObjects.Text;
+  private hud!: RuntimeHudObjects;
   private eventLog!: Phaser.GameObjects.Text;
   private selectedWeapon: WeaponId = 'python';
   private isEnded = false;
@@ -70,28 +88,115 @@ export class GameScene extends Phaser.Scene {
     this.keys = this.input.keyboard!.addKeys('W,A,S,D,R,ESC') as Record<string, Phaser.Input.Keyboard.Key>;
     this.weaponSystem.addWeapon(this.selectedWeapon);
 
-    this.hudPanel = this.add.container(18, 14).setScrollFactor(0).setDepth(uiDepths.hud);
-    const hudBg = this.add.rectangle(0, 0, 470, 116, toHexColor('bg'), 0.88).setOrigin(0, 0);
-    hudBg.setStrokeStyle(uiLayout.panelBorderWidth, toHexColor('dim'), 0.34);
-    const statusStrip = this.add.rectangle(0, 0, 470, 24, toHexColor('status'), 0.92).setOrigin(0, 0);
-    this.hudStatus = this.add.text(12, 5, '', { fontFamily: uiFonts.fallbackMono, fontSize: '13px', color: uiColors.white });
-    this.hudVitals = this.add.text(12, 34, '', { fontFamily: uiFonts.fallbackMono, fontSize: '14px', color: uiColors.green });
-    this.hudEvents = this.add.text(12, 58, '', { fontFamily: uiFonts.fallbackMono, fontSize: '12px', color: uiColors.dim, wordWrap: { width: 438 } });
-    this.hudBoss = this.add.text(12, 88, '', { fontFamily: uiFonts.fallbackMono, fontSize: '13px', color: uiColors.red });
-    this.hudPanel.add([hudBg, statusStrip, this.hudStatus, this.hudVitals, this.hudEvents, this.hudBoss]);
-    this.eventLog = this.add.text(18, 554, 'boot: Stage 1 session opened', {
-      fontFamily: 'monospace',
-      fontSize: '14px',
-      color: '#65d6ad',
-      backgroundColor: '#0b1020',
-      padding: { left: 10, right: 10, top: 8, bottom: 8 },
-    }).setScrollFactor(0).setDepth(100);
+    this.createRuntimeHud();
     this.input.keyboard?.on('keydown-R', () => this.scene.restart({ weapon: this.selectedWeapon }));
     this.input.keyboard?.on('keydown-ESC', () => this.scene.start('MenuScene'));
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       clearRuntimeAlert();
       clearRunDecisionOverlay();
+      clearCodexOverlay();
     });
+  }
+
+  private createRuntimeHud(): void {
+    const root = this.add.container(14, 14).setScrollFactor(0).setDepth(uiDepths.hud);
+    const hpValue = this.addHudText(226, 34, '', '20px', uiColors.white).setOrigin(1, 0);
+    const hpMeter = this.addHudMeter(54, 62, 184, uiColors.red);
+    const upgradeValue = this.addHudText(226, 82, '', '20px', uiColors.white).setOrigin(1, 0);
+    const upgradeMeter = this.addHudMeter(78, 112, 160, uiColors.teal);
+    const timer = this.addHudText(372, 16, '00:00', '52px', uiColors.white).setOrigin(0.5, 0);
+    const stage = this.addHudText(372, 84, '', '18px', uiColors.comment).setOrigin(0.5, 0);
+    const weaponName = this.addHudText(506, 34, '', '30px', uiColors.teal);
+    const weaponDetail = this.addHudText(506, 84, '', '20px', uiColors.dim);
+    const eventLine = this.addHudText(14, 552, '', '20px', uiColors.dim, 510);
+    const eventLog = this.addHudText(14, 590, 'boot: Stage 1 session opened', '20px', uiColors.green, 510);
+    const bossLine = this.addHudText(558, 552, '', '20px', uiColors.red, 340);
+    const bossMeter = this.addHudMeter(558, 586, 340, uiColors.red);
+    const hint = this.addHudText(558, 602, '', '13px', uiColors.dim, 340);
+
+    root.add([
+      this.addHudPanel(0, 0, 252, 140, uiColors.teal),
+      this.addHudLabel(12, 10, 'Player Runtime'),
+      this.addHudText(12, 34, 'HP', '20px', uiColors.red),
+      hpValue,
+      hpMeter.background,
+      hpMeter.fill,
+      this.addHudText(12, 82, 'Upgrade', '20px', uiColors.green),
+      upgradeValue,
+      upgradeMeter.background,
+      upgradeMeter.fill,
+      this.addHudPanel(266, 0, 212, 140, uiColors.teal),
+      timer,
+      stage,
+      this.addHudPanel(492, 0, 336, 140, uiColors.blue),
+      this.addHudLabel(506, 10, 'Selected Weapon'),
+      weaponName,
+      weaponDetail,
+      this.addHudPanel(0, 524, 532, 92, uiColors.yellow),
+      this.addHudLabel(14, 538, 'Event Queue'),
+      eventLine,
+      eventLog,
+      this.addHudPanel(544, 524, 372, 92, uiColors.red),
+      this.addHudLabel(558, 538, 'Warning State'),
+      bossLine,
+      bossMeter.background,
+      bossMeter.fill,
+      hint,
+    ]);
+
+    this.hud = {
+      hpValue,
+      hpMeter,
+      upgradeValue,
+      upgradeMeter,
+      timer,
+      stage,
+      weaponName,
+      weaponDetail,
+      eventLine,
+      bossLine,
+      bossMeter,
+      hint,
+    };
+    this.eventLog = eventLog;
+  }
+
+  private addHudPanel(x: number, y: number, width: number, height: number, accent: string): Phaser.GameObjects.Rectangle {
+    const panel = this.add.rectangle(x, y, width, height, toHexColor('bg'), 0.9).setOrigin(0, 0);
+    panel.setStrokeStyle(uiLayout.panelBorderWidth, Number.parseInt(accent.slice(1), 16), 0.36);
+    return panel;
+  }
+
+  private addHudLabel(x: number, y: number, text: string): Phaser.GameObjects.Text {
+    return this.addHudText(x, y, text, '16px', uiColors.comment).setAlpha(0.96);
+  }
+
+  private addHudText(
+    x: number,
+    y: number,
+    text: string,
+    fontSize: string,
+    color: string,
+    wrapWidth?: number,
+  ): Phaser.GameObjects.Text {
+    return this.add.text(x, y, text, {
+      fontFamily: uiFonts.fallbackMono,
+      fontSize,
+      color,
+      wordWrap: wrapWidth ? { width: wrapWidth } : undefined,
+    });
+  }
+
+  private addHudMeter(
+    x: number,
+    y: number,
+    width: number,
+    color: string,
+  ): RuntimeHudMeter {
+    const background = this.add.rectangle(x, y, width, 8, 0x111111, 0.92).setOrigin(0, 0);
+    background.setStrokeStyle(1, toHexColor('dim'), 0.22);
+    const fill = this.add.rectangle(x + 1, y + 1, width - 2, 6, Number.parseInt(color.slice(1), 16), 0.9).setOrigin(0, 0);
+    return { background, fill, maxWidth: width - 2 };
   }
 
   update(_time: number, deltaMs: number): void {
@@ -267,21 +372,39 @@ export class GameScene extends Phaser.Scene {
     const eventSummaries: RuntimeEventSummary[] = ['q1', 'e1', 'e2', 'boss']
       .map((id) => this.eventSystem.getState(id as EventId));
     const bossConfig = stages[0].boss;
+    const selectedOwnedWeapon = this.weaponSystem.getOwned().find((weapon) => weapon.id === this.selectedWeapon);
+    const selectedWeaponConfig = weapons[this.selectedWeapon];
     const view = buildRuntimeHudView({
       stageTitle: stages[0].title,
       hp: this.hp,
       maxHp: 100,
       kills: this.kills,
+      nextUpgradeAtKills: this.nextUpgradeAtKills,
       elapsedSec: this.elapsedSec,
-      weaponCodeName: weapons[this.selectedWeapon].codeName,
+      weaponCodeName: selectedWeaponConfig.codeName,
+      weaponLevel: selectedOwnedWeapon?.level,
+      cooldownLeftMs: selectedOwnedWeapon?.cooldownLeftMs,
+      cooldownMs: selectedWeaponConfig.cooldownMs,
       events: eventSummaries,
       boss: this.boss ? { name: bossConfig.name, hp: this.boss.hp, maxHp: this.boss.maxHp } : null,
     });
 
-    this.hudStatus.setText(view.statusLine);
-    this.hudVitals.setText(view.vitalsLine);
-    this.hudEvents.setText(view.eventLine);
-    this.hudBoss.setText(view.bossLine ?? 'move WASD/arrows | R restart | ESC menu');
+    this.hud.hpValue.setText(view.hp.value);
+    this.setMeterRatio(this.hud.hpMeter, view.hp.ratio);
+    this.hud.upgradeValue.setText(view.upgrade.value);
+    this.setMeterRatio(this.hud.upgradeMeter, view.upgrade.ratio);
+    this.hud.timer.setText(view.timerLabel);
+    this.hud.stage.setText(view.stageLabel);
+    this.hud.weaponName.setText(view.weapon.label);
+    this.hud.weaponDetail.setText(view.weapon.detail);
+    this.hud.eventLine.setText(view.eventLine);
+    this.hud.bossLine.setText(view.boss ? `${view.boss.value} | ${view.boss.detail}` : 'boss pending | events live');
+    this.setMeterRatio(this.hud.bossMeter, view.boss?.ratio ?? 0.12);
+    this.hud.hint.setText(view.boss ? 'CRITICAL ERROR attached' : view.hintLine);
+  }
+
+  private setMeterRatio(meter: RuntimeHudMeter, ratio: number): void {
+    meter.fill.width = Math.max(2, Math.round(meter.maxWidth * ratio));
   }
 
   private openQuickFix(): void {
@@ -309,6 +432,9 @@ export class GameScene extends Phaser.Scene {
         kills: this.kills,
         unlockedText: 'reward weapon unlocked',
         onContinue: () => this.scene.start('MenuScene'),
+        onCodex: () => showCodexOverlay({
+          onClose: () => this.endRun(true),
+        }),
         onMenu: () => this.scene.start('MenuScene'),
       });
       return;

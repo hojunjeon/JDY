@@ -1,0 +1,174 @@
+.jds-codex-root {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.026) 1px, transparent 1px, transparent 4px),
+    radial-gradient(circle at 70% 16%, rgba(78, 201, 176, 0.12), transparent 340px),
+    #1e1e1e;
+  color: #d4d4d4;
+  font-family: "JetBrains Mono", "Space Mono", "Noto Sans KR", Consolas, monospace;
+}
+
+.jds-codex {
+  height: calc(100vh - 52px);
+  margin: 26px;
+  border: 1px solid #3c3c3c;
+  display: grid;
+  grid-template-rows: 34px minmax(0, 1fr) 28px;
+  overflow: hidden;
+  background: rgba(30, 30, 30, 0.97);
+}
+
+.jds-codex .titlebar,
+.jds-codex .statusbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.jds-codex .titlebar {
+  background: #252526;
+  color: #858585;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.jds-codex .statusbar {
+  justify-content: space-between;
+  background: #007acc;
+  color: #fff;
+}
+
+.jds-codex .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.jds-codex .dot.red { background: #ff5f57; }
+.jds-codex .dot.yellow { background: #ffbd2e; }
+.jds-codex .dot.green { background: #28c840; }
+
+.jds-codex .layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+}
+
+.jds-codex .rail {
+  background: #252526;
+  border-right: 1px solid #3c3c3c;
+  padding: 16px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.jds-codex button {
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+  color: #858585;
+  font: inherit;
+  text-align: left;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.jds-codex button.active {
+  border-left: 3px solid #4ec9b0;
+  color: #4ec9b0;
+  background: rgba(78, 201, 176, 0.08);
+}
+
+.jds-codex .workspace {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 36px auto minmax(0, 1fr);
+  background: #1e1e1e;
+}
+
+.jds-codex .tabs {
+  display: flex;
+  background: #181818;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.jds-codex .tabs span {
+  min-width: 150px;
+  padding: 10px 13px 0;
+  color: #858585;
+  border-right: 1px solid #3c3c3c;
+  font-size: 12px;
+}
+
+.jds-codex .tabs .active {
+  color: #d4d4d4;
+  border-top: 2px solid #4ec9b0;
+}
+
+.jds-codex .head {
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 18px;
+}
+
+.jds-codex .head h1 {
+  margin: 0;
+  font-size: clamp(34px, 5vw, 68px);
+  letter-spacing: 0;
+}
+
+.jds-codex .label {
+  color: #6a9955;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.jds-codex code {
+  color: #dcdcaa;
+  border-left: 3px solid #4ec9b0;
+  background: rgba(8, 8, 8, 0.64);
+  padding: 12px;
+}
+
+.jds-codex .grid {
+  min-height: 0;
+  overflow: auto;
+  padding: 0 22px 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.jds-codex .entry {
+  border: 1px solid rgba(78, 201, 176, 0.32);
+  border-left: 3px solid rgba(78, 201, 176, 0.58);
+  background: rgba(37, 37, 38, 0.88);
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.jds-codex .entry.locked {
+  opacity: 0.48;
+}
+
+.jds-codex .entry strong {
+  color: #d4d4d4;
+}
+
+.jds-codex .entry span {
+  color: #4ec9b0;
+}
+
+.jds-codex .entry p {
+  margin: 0;
+  color: #858585;
+  line-height: 1.5;
+}

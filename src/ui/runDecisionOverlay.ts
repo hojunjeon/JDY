@@ -33,6 +33,7 @@ export function showQuickFixOverlay(input: { weapon: WeaponId; onSelect: (id: Qu
           </div>
         </section>
       </div>
+      <footer class="jds-decision-statusbar"><span>05_level_up_upgrade_modal_frontend_design.html</span><span>1-3: choose patch</span><span>paused</span></footer>
     </section>
   `);
   activeOverlay?.querySelectorAll<HTMLElement>('[data-quick-fix]').forEach((button) => {
@@ -47,6 +48,7 @@ export function showStageClearOverlay(input: {
   unlockedText: string;
   onContinue: () => void;
   onMenu: () => void;
+  onCodex?: () => void;
 }): void {
   const view = buildStageClearView(input);
   showOverlay(`
@@ -60,10 +62,12 @@ export function showStageClearOverlay(input: {
       <code>${view.command}</code>
       <p>${view.summary}</p>
       <strong>${view.unlockedText}</strong>
-      <div class="actions"><button data-action="continue">continue</button><button data-action="menu">menu</button></div>
+      <div class="actions"><button data-action="continue">continue</button><button data-action="codex">codex</button><button data-action="menu">menu</button></div>
+      <footer class="jds-decision-statusbar"><span>08_stage_clear_result_frontend_design.html</span><span>continue / codex / menu</span><span>pass</span></footer>
     </section>
   `);
   activeOverlay?.querySelector<HTMLElement>('[data-action="continue"]')?.addEventListener('click', input.onContinue);
+  activeOverlay?.querySelector<HTMLElement>('[data-action="codex"]')?.addEventListener('click', () => input.onCodex?.());
   activeOverlay?.querySelector<HTMLElement>('[data-action="menu"]')?.addEventListener('click', input.onMenu);
 }
 
@@ -86,6 +90,7 @@ export function showGameOverOverlay(input: {
       <code>${view.command}</code>
       <p>${view.summary}</p>
       <div class="actions"><button data-action="retry">retry</button><button data-action="menu">menu</button></div>
+      <footer class="jds-decision-statusbar"><span>09_game_over_frontend_design.html</span><span>retry / menu</span><span>failed</span></footer>
     </section>
   `);
   activeOverlay?.querySelector<HTMLElement>('[data-action="retry"]')?.addEventListener('click', input.onRetry);

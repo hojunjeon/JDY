@@ -1,0 +1,31 @@
+﻿# Deep Interview Context Snapshot: OMX-only structure
+
+- Task statement: 기존 JDS 프로젝트 구조를 버리고, 프롬프트 일기를 제외하고 OMX 구조 중심으로 개발을 진행하고 싶다.
+- Desired outcome: 어떤 기존 구조를 폐기/보존/이관할지와, 앞으로 개발 산출물을 어디에 둘지 명확히 한 실행-ready 요구사항이 필요하다.
+- Stated solution: "omx 구조로만" 개발한다. 단, 프롬프트 일기는 제외한다.
+- Probable intent hypothesis: 기존 docs/superpowers, PLANS.md, 루트 문서/기존 계획 산출물 등이 OMX의 .omx/context, .omx/plans, .omx/specs, .omx/state와 중복되어 개발 흐름이 헷갈리는 문제를 줄이려는 의도로 보인다.
+- Known facts/evidence:
+  - Brownfield repo: Phaser 3 + TypeScript + Vite project (package.json).
+  - App code currently under src/ with scenes/systems/ui/data/assets.
+  - Tests under 	ests/ and 	ests/e2e/.
+  - OMX runtime artifacts already exist under .omx/: context, plans, ralph, state, logs, cache, backups.
+  - Legacy/planning/docs surfaces include docs/superpowers/, PLANS.md, AGENTS.md, DESIGN.md, examples/codex_examples/plugins, and prompt diary files.
+  - Prompt diary exists at docs/prompt-diary/프롬프트일기_001.md through _012.md, plus root 프롬프트일기_예시.md.
+  - omx explore unavailable on Windows in this session; fallback read-only shell inspection used.
+- Constraints:
+  - Deep Interview must not implement directly.
+  - Need explicit non-goals and decision boundaries before handoff.
+  - Destructive deletion/large migration needs clarified boundaries.
+  - Prompt diary is explicitly excluded from the "discard existing structure" idea.
+- Unknowns/open questions:
+  - Does "기존 구조" mean docs/plans/workflow artifacts only, or also app code layout (src/, 	ests/, examples, plugins)?
+  - Does "omx 구조" mean using .omx as the canonical place for specs/plans/state only, or physically moving/removing project files into OMX directories?
+  - What should remain as standard repo root files for build/test (package.json, src, 	ests, config)?
+  - What migration acceptance criteria prove the new structure is successful?
+- Decision-boundary unknowns:
+  - May Codex delete/archive non-OMX docs automatically?
+  - May Codex modify AGENTS.md, docs, folder layout, tests, or build paths?
+  - Which items require explicit confirmation before removal?
+- Likely codebase touchpoints:
+  - .omx/, AGENTS.md, .codex/skills/, docs/superpowers/, docs/prompt-diary/, PLANS.md, README.md, DESIGN.md, src/, 	ests/, examples/, codex_examples/, plugins/.
+- Prompt-safe initial-context summary status: not_needed

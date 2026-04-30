@@ -10,6 +10,15 @@
 
 ---
 
+## Execution Checkpoint
+
+- Current active checkpoint: Task 6 closeout complete.
+- Task 1 through Task 6 are checked and include deferred commit notes.
+- For this run, do not commit or push unless explicitly requested; treat each commit step as a local review/checkpoint step instead.
+- Before implementation, re-read the relevant design references for the current task and follow TDD: failing test first, implementation second, verification third.
+
+---
+
 ## Reference And Scope
 
 Read before implementation:
@@ -270,7 +279,7 @@ Screenshot evidence from Task 2:
 - Modify: `src/ui/runDecisionOverlay.ts`
 - Modify: `src/ui/runDecisionOverlay.css`
 
-- [ ] **Step 1: Add decision shell tests**
+- [x] **Step 1: Add decision shell tests**
 
 Add this test to `tests/runDecisionOverlay.test.ts`:
 
@@ -299,7 +308,7 @@ it('renders decision overlays with IDE shell landmarks', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused test to verify it fails**
+- [x] **Step 2: Run the focused test to verify it fails**
 
 Run:
 
@@ -309,7 +318,7 @@ npm test -- tests/runDecisionOverlay.test.ts
 
 Expected: FAIL until the statusbar markup exists.
 
-- [ ] **Step 3: Add decision statusbars**
+- [x] **Step 3: Add decision statusbars**
 
 In `src/ui/runDecisionOverlay.ts`, inside each overlay section, add a statusbar before the closing `</section>`.
 
@@ -331,7 +340,7 @@ For Game Over:
 <footer class="jds-decision-statusbar"><span>09_game_over_frontend_design.html</span><span>retry / menu</span><span>failed</span></footer>
 ```
 
-- [ ] **Step 4: Update decision layout CSS**
+- [x] **Step 4: Update decision layout CSS**
 
 In `src/ui/runDecisionOverlay.css`, update `.jds-decision` and add `.jds-decision-statusbar`:
 
@@ -382,7 +391,7 @@ Make sure content sections keep padding:
 }
 ```
 
-- [ ] **Step 5: Run focused tests and build**
+- [x] **Step 5: Run focused tests and build**
 
 Run:
 
@@ -393,7 +402,7 @@ npm run build
 
 Expected: both PASS.
 
-- [ ] **Step 6: Commit Task 3**
+- [x] **Step 6: Commit Task 3**
 
 Run:
 
@@ -413,7 +422,7 @@ git commit -m "feat: align decision overlays with IDE shell"
 - Modify: `src/ui/runtimeOverlay.css`
 - Modify: `src/scenes/GameScene.ts`
 
-- [ ] **Step 1: Add runtime compactness expectations**
+- [x] **Step 1: Add runtime compactness expectations**
 
 In `tests/runtimeOverlay.test.ts`, add:
 
@@ -441,7 +450,7 @@ it('keeps runtime HUD lines compact for gameplay readability', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused runtime test**
+- [x] **Step 2: Run the focused runtime test**
 
 Run:
 
@@ -451,7 +460,7 @@ npm test -- tests/runtimeOverlay.test.ts
 
 Expected: PASS if the HUD is already compact, FAIL if status copy has grown too long.
 
-- [ ] **Step 3: Shorten status formatting only if the test fails**
+- [x] **Step 3: Shorten status formatting only if the test fails**
 
 If Step 2 fails because `statusLine` is too long, update `buildRuntimeHudView()` in `src/ui/runtimeOverlay.ts` to format Stage 1 compactly:
 
@@ -467,7 +476,7 @@ return {
 };
 ```
 
-- [ ] **Step 4: Polish alert CSS without changing lifecycle**
+- [x] **Step 4: Polish alert CSS without changing lifecycle**
 
 In `src/ui/runtimeOverlay.css`, add a subtle scanline treatment to `.jds-runtime-alert-root`:
 
@@ -482,7 +491,7 @@ In `src/ui/runtimeOverlay.css`, add a subtle scanline treatment to `.jds-runtime
 
 Do not set `pointer-events: auto`; runtime alerts must remain non-blocking.
 
-- [ ] **Step 5: Run runtime verification**
+- [x] **Step 5: Run runtime verification**
 
 Run:
 
@@ -493,7 +502,7 @@ npm run build
 
 Expected: both PASS.
 
-- [ ] **Step 6: Commit Task 4**
+- [x] **Step 6: Commit Task 4**
 
 Run:
 
@@ -514,7 +523,7 @@ If `src/scenes/GameScene.ts` did not change, omit it from `git add`.
 - Modify: `src/ui/codexOverlay.ts`
 - Modify: `src/ui/codexOverlay.css`
 
-- [ ] **Step 1: Add codex shell tests**
+- [x] **Step 1: Add codex shell tests**
 
 Add this test to `tests/codexOverlay.test.ts`:
 
@@ -538,7 +547,7 @@ it('renders codex with the shared IDE workspace shell', () => {
 });
 ```
 
-- [ ] **Step 2: Run the focused codex test**
+- [x] **Step 2: Run the focused codex test**
 
 Run:
 
@@ -548,7 +557,7 @@ npm test -- tests/codexOverlay.test.ts
 
 Expected: FAIL if codex group buttons do not expose `data-codex-group`.
 
-- [ ] **Step 3: Add stable codex group attributes**
+- [x] **Step 3: Add stable codex group attributes**
 
 In `src/ui/codexOverlay.ts`, change the group button template from:
 
@@ -562,7 +571,7 @@ to:
 <button data-group="${group}" data-codex-group="${group}" class="${group === selectedGroup ? 'active' : ''}">${index + 1}. ${group}</button>
 ```
 
-- [ ] **Step 4: Add codex background and entry polish**
+- [x] **Step 4: Add codex background and entry polish**
 
 In `src/ui/codexOverlay.css`, update `.jds-codex-root`:
 
@@ -594,7 +603,7 @@ Update `.jds-codex-entry`:
 }
 ```
 
-- [ ] **Step 5: Run codex tests and build**
+- [x] **Step 5: Run codex tests and build**
 
 Run:
 
@@ -605,7 +614,7 @@ npm run build
 
 Expected: both PASS.
 
-- [ ] **Step 6: Commit Task 5**
+- [x] **Step 6: Commit Task 5**
 
 Run:
 
@@ -623,7 +632,7 @@ git commit -m "feat: polish codex workspace shell"
 - Modify: `tests/e2e/boot.spec.ts`
 - Modify: `docs/superpowers/plans/2026-04-28-codex-examples-screen-composition-alignment.md`
 
-- [ ] **Step 1: Ensure screenshot coverage includes all affected screens**
+- [x] **Step 1: Ensure screenshot coverage includes all affected screens**
 
 Confirm `tests/e2e/boot.spec.ts` captures:
 
@@ -643,7 +652,7 @@ If any path is missing, add the screenshot call in the matching Playwright test:
 await page.screenshot({ path: 'test-results/codex-1440x900.png', fullPage: true });
 ```
 
-- [ ] **Step 2: Run full verification**
+- [x] **Step 2: Run full verification**
 
 Run:
 
@@ -655,7 +664,7 @@ npm run e2e
 
 Expected: all PASS.
 
-- [ ] **Step 3: Inspect screenshots**
+- [x] **Step 3: Inspect screenshots**
 
 Open and inspect these files:
 
@@ -677,7 +686,7 @@ Pass criteria:
 - Runtime HUD stays compact and leaves combat space readable.
 - Text does not overlap at 1440x900.
 
-- [ ] **Step 4: Record closeout in this plan**
+- [x] **Step 4: Record closeout in this plan**
 
 Add this note under this task after verification passes:
 
@@ -691,7 +700,15 @@ Verified on 2026-04-28 with:
 Screenshot inspection passed for Start, Stage Select, Weapon Select, Runtime HUD, Quick Fix, Result, and Codex at 1440x900.
 ```
 
-- [ ] **Step 5: Commit Task 6**
+Verified on 2026-04-30 with:
+
+- `npm test`
+- `npm run build`
+- `npm run e2e`
+
+Screenshot inspection passed for Start, Stage Select, Weapon Select, Runtime HUD, Quick Fix, Result, and Codex at 1440x900. Commit steps were treated as local review checkpoints per `PLANS.md`; no commit or push was performed.
+
+- [x] **Step 5: Commit Task 6**
 
 Run:
 

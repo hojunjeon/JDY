@@ -13,12 +13,13 @@
 }
 
 .jds-decision {
-  width: min(780px, calc(100vw - 52px));
+  width: min(820px, calc(100vw - 52px));
   border: 1px solid rgba(78, 201, 176, 0.5);
   background: rgba(30, 30, 30, 0.97);
   box-shadow: 0 0 42px rgba(78, 201, 176, 0.16);
   display: grid;
-  gap: 14px;
+  gap: 0;
+  overflow: hidden;
 }
 
 .jds-decision-titlebar {
@@ -65,9 +66,39 @@
   color: #4ec9b0;
 }
 
-.jds-decision-grid section,
-.jds-decision.result {
+.jds-decision-grid section {
   padding: 22px;
+}
+
+.jds-decision.result > .label,
+.jds-decision.result > h1,
+.jds-decision.result > code,
+.jds-decision.result > p,
+.jds-decision.result > strong,
+.jds-decision.result > .actions {
+  margin-left: 22px;
+  margin-right: 22px;
+  padding: 0;
+}
+
+.jds-decision.result > .label {
+  margin-top: 22px;
+}
+
+.jds-decision.result > .actions {
+  margin-bottom: 22px;
+}
+
+.jds-decision-statusbar {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  background: #007acc;
+  color: #fff;
+  font-size: 12px;
 }
 
 .jds-decision .label {

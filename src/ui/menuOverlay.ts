@@ -48,6 +48,7 @@ function renderStart(): string {
           <footer class="jds-actions">
             <code><span class="teal">$</span> session.prepare("stage_01")</code>
             <button data-action="start.confirm">start debug</button>
+            <button data-action="codex.open">open codex</button>
           </footer>
         </section>
         <aside class="jds-sidebar">
@@ -149,6 +150,7 @@ export interface MenuOverlayController {
 export function mountMenuOverlay(input: {
   state: MenuFlowState;
   dispatch: (event: MenuFlowEvent) => void;
+  openCodex?: () => void;
 }): MenuOverlayController {
   const root = document.createElement('div');
   root.className = 'jds-menu-root';
@@ -168,6 +170,7 @@ export function mountMenuOverlay(input: {
     if (action === 'stage.confirm') input.dispatch({ type: 'stage.confirm' });
     if (action === 'weapon.confirm') input.dispatch({ type: 'weapon.confirm' });
     if (action === 'back') input.dispatch({ type: 'back' });
+    if (action === 'codex.open') input.openCodex?.();
     if (stageId) input.dispatch({ type: 'stage.select', stageId: Number(stageId) });
     if (weaponId) input.dispatch({ type: 'weapon.select', weapon: weaponId as MenuFlowState['selectedWeapon'] });
   };

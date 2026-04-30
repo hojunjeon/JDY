@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { starterWeaponConfigs } from '../data/gameData';
+import { clearCodexOverlay, showCodexOverlay } from '../ui/codexOverlay';
 import { createMenuFlowState, reduceMenuFlow, type MenuFlowEvent, type MenuFlowState } from '../ui/menuFlow';
 import { mountMenuOverlay, type MenuOverlayController } from '../ui/menuOverlay';
 import { uiColors } from '../ui/theme';
@@ -19,6 +20,7 @@ export class MenuScene extends Phaser.Scene {
     this.overlay = mountMenuOverlay({
       state: this.flow,
       dispatch: (event) => this.dispatch(event),
+      openCodex: () => showCodexOverlay({ onClose: () => this.render() }),
     });
     this.registerKeyboard();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.destroyOverlay());
@@ -97,6 +99,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private destroyOverlay(): void {
+    clearCodexOverlay();
     this.overlay?.destroy();
     this.overlay = null;
   }
